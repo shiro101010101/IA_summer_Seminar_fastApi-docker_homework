@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  api:
+    image: "fast_api"
+    container_name: "fast_api"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/usr/src/app
+    working_dir: /usr/src/app
+    command: uvicorn main:app --reload --port=8000 --host=0.0.0.0
+    # command: gunicorn -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --log-level info main:app
+    networks:
+      - fast_network
+networks:
+  default:
+    external: 
+      name: bridge
+  fast_network:
+    name: fast_network
+    driver: bridge
+
+    # docker compose upをターミナルに書き立ち上げ、ローカルホスト
+
